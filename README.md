@@ -18,13 +18,13 @@ rosrun vehicle_sim_launcher setup.sh
 #### To visualise the Lidar pointcloud with gpu:
 
 ```
-roslaunch vehicle_sim_launcher world_test.launch gpu:=true rvizconfig:=/home/user/sensoroncar_simulation/src/vehicle_sim/urdf.rviz
+roslaunch vehicle_sim_launcher lidar_setup.launch
 ```
 
 #### To visualise the camera topics with gpu:
 
 ```
-roslaunch vehicle_sim_launcher world_test.launch gpu:=true rvizconfig:=/home/user/sensoroncar_simulation/src/vehicle_sim/urdf_camera.rviz
+roslaunch vehicle_sim_launcher camera_setup.launch
 ```
 
 
