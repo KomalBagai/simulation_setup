@@ -1,0 +1,8 @@
+wheel_radius: 0.341
+wheel_width: 0.225
+wheel_base: 2.950
+wheel_tread: 1.55
+vehicle_mass: 5000.0
+vehicle_length: 3.28
+vehicle_width: 1.514
+vehicle_height: 1.56

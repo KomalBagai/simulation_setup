@@ -1,0 +1,113 @@
+base_link2camera:
+  x: 1.999
+  y: 0.0
+  z: 1.5
+  roll: 0.0
+  pitch: 0.0
+  yaw: 0.0
+base_link2back_camera:
+  x: -0.722993
+  y: -0.04946
+  z: 0.428051 #middle of the lidars
+  roll: 0.0
+  pitch: 0.0
+  yaw: 3.14 #180 degree rotation
+base_link2right_camera:
+  x: 2.3151
+  y: 1.20
+  z: 0.688741
+  roll: 0.0
+  pitch: 0.0
+  yaw: 3.14 #180 degree rotation
+base_link2left_camera:
+  x: 2.3151
+  y: -1.20
+  z: 0.688741 
+  roll: 0.0
+  pitch: 0.0
+  yaw: 3.14 #180 degree rotation
+
+# base_link2velodyne_hdl:
+#   x: 1.599 #1.999
+#   y: 0.0
+#   z: 1.23 #1.15
+#   roll: 0.0
+#   # pitch: 0.26 # 15 degree angle
+#   pitch: 0.0872665 # 5 degree angle
+#   yaw: 0.0
+
+base_link2velodyne:
+  x: 1.599 #1.999
+  y: 0.0
+  z: 1.99 #1.15
+  roll: 0.0
+  #pitch: 0.26 # 15 degree angle
+  pitch: 0.0872665 # 5 degree angle
+  yaw: 0.0
+base_link2velodyne_left:
+  # x: 3.300
+  # y: 0.9
+  # z: 0.65
+  x: 1.6359 
+  y: 0.72456
+  z: 1.332
+  roll: -0.50
+  pitch: 0.2
+  yaw: -0.0
+
+base_link2velodyne_right:
+  # x: 3.300
+  # y: -0.9
+  # z: 0.65
+  x: 1.6359 
+  y: -0.72456
+  z: 1.332
+  roll: 0.50
+  pitch: 0.2 
+  yaw: 0.0
+
+base_link2velodyne_back:
+  x: -0.65623
+  y: 0.0
+  z: 0.86754
+  roll: 0.0
+  pitch: -0.3
+  yaw: 0.0
+
+
+base_link2left_laser:
+  x: 1.2412
+  y: -0.84201
+  z: 0.493077
+  roll: 0.0
+  pitch: 0.7
+  yaw: -1.5
+base_link2right_laser:
+  x: 1.229
+  y: 0.84201
+  z: 0.49739
+  roll: 0.0
+  pitch: 0.7
+  yaw: 1.5
+base_link2back_laser:
+  x: -0.722993
+  y: -0.04946
+  z: 0.288051
+  roll: 0.0
+  pitch: 0.8
+  yaw: 3.14
+base_link2front_laser:
+  x: 3.8307
+  y: 0.0027332
+  z: 0.17398
+  roll: 0.0
+  pitch: 0.5
+  yaw: 0.0
+
+base_link2imu:
+  x: 0.0
+  y: 0.0
+  z: 2.6
+  roll:  -0.95
+  pitch: 0.0
+  yaw: 0.0

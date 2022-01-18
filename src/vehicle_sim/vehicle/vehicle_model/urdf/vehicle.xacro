@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<robot name="autoware_gazebo" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find vehicle_model)/urdf/body.xacro" />
+  <xacro:include filename="$(find vehicle_model)/urdf/wheel.xacro" />
+  <xacro:include filename="$(find vehicle_model)/urdf/steering.xacro" />
+  <xacro:include filename="$(find velodyne_description)/urdf/HDL-32E.urdf.xacro"/>
+  <xacro:include filename="$(find velodyne_description)/urdf/CE30-A.urdf.xacro"/>
+  <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro"/>
+  <xacro:include filename="$(find camera_description)/urdf/monocular_camera.xacro"/>
+  <xacro:include filename="$(find imu_description)/urdf/imu.xacro"/>
+
+  <xacro:arg name="gpu" default="false"/>
+
+  <xacro:property name="pi" value="3.1415926835897931"/>
+
+  <link name="base_footprint"/>
+
+  <!-- ================ vehicle ================ -->
+  <!-- load parameter -->
+	<xacro:property name="vehicle_info" value="${load_yaml('$(find vehicle_model)/config/vehicle_info.yaml')}"/>
+  <!-- set parameter -->
+	<xacro:property name="wheel_radius" value="${vehicle_info['wheel_radius']}"/>
+  <xacro:property name="wheel_width" value="${vehicle_info['wheel_width']}"/>
+  <xacro:property name="wheel_base" value="${vehicle_info['wheel_base']}"/>
+  <xacro:property name="wheel_tread" value="${vehicle_info['wheel_tread']}"/>
+  <xacro:property name="vehicle_mass" value="${vehicle_info['vehicle_mass']}"/>
+  <xacro:property name="vehicle_length" value="${vehicle_info['vehicle_length']}"/>
+  <xacro:property name="vehicle_width" value="${vehicle_info['vehicle_width']}"/>
+  <xacro:property name="vehicle_height" value="${vehicle_info['vehicle_height']}"/>
+  <xacro:property name="vehicle_mass_height" value="0.5"/>
+
+  <!-- body-->
+  <xacro:body_macro suffix="base"
+                    parent="base_footprint"
+                    wheel_radius="${wheel_radius}"
+                    wheel_base="${wheel_base}"
+                    vehicle_mass="${vehicle_mass}"
+                    vehicle_mass_height="${vehicle_mass_height}"
+                    vehicle_length="${vehicle_length}"
+                    vehicle_width="${vehicle_width}"
+                    vehicle_height="${vehicle_height}"/>
+  
+  <!-- steering-->
+  <xacro:steering_link_macro suffix="steering_front" parent="base_link" x="${wheel_base}" y="0"/>
+  <xacro:steering_macro suffix="steering_right_front" parent="steering_front_link" x="0" y="${-1*wheel_tread/2}" yaw="0" length="${wheel_width}"/>
+  <xacro:steering_macro suffix="steering_left_front" parent="steering_front_link" x="0" y="${wheel_tread/2}" yaw="0" length="${wheel_width}"/>
+  <!-- wheel -->
+  <xacro:wheel_macro suffix="wheel_right_front" parent="steering_right_front_link" x="0" y="0" yaw="${pi}" radius="${wheel_radius}" width="${wheel_width}"/>
+  <xacro:wheel_macro suffix="wheel_left_front" parent="steering_left_front_link" x="0" y="0" yaw="0" radius="${wheel_radius}" width="${wheel_width}"/>
+  <xacro:wheel_macro suffix="wheel_right_rear" parent="base_link" x="0" y="${-1*wheel_tread/2}" yaw="${pi}" radius="${wheel_radius}" width="${wheel_width}"/>
+  <xacro:wheel_macro suffix="wheel_left_rear" parent="base_link" x="0" y="${wheel_tread/2}" yaw="0" radius="${wheel_radius}" width="${wheel_width}"/>
+  <!-- actuator -->
+ 	<xacro:include filename="$(find vehicle_model)/urdf/actuator.xacro"/>
+  <!-- gazebo -->
+ 	<xacro:include filename="$(find vehicle_model)/urdf/vehicle.gazebo"/>
+
+  <!-- ================ sensor ================ -->
+	<xacro:property name="calibration" value="${load_yaml('$(find vehicle_model)/config/calibration.yaml')}"/>
+  <!-- <HDL-32E parent="base_link" name="velodyne_hdl" topic="/points_hdl_raw" hz="10" samples="220" gpu="$(arg gpu)">
+    <origin xyz="${calibration['base_link2velodyne_hdl']['x']} ${calibration['base_link2velodyne_hdl']['y']} ${calibration['base_link2velodyne_hdl']['z']}" 
+            rpy="${calibration['base_link2velodyne_hdl']['roll']} ${calibration['base_link2velodyne_hdl']['pitch']} ${calibration['base_link2velodyne_hdl']['yaw']}" />
+  </HDL-32E> -->
+  <VLP-16 parent="base_link" name="velodyne" topic="/points_raw" hz="10" samples="220" gpu="$(arg gpu)">
+    <origin xyz="${calibration['base_link2velodyne']['x']} ${calibration['base_link2velodyne']['y']} ${calibration['base_link2velodyne']['z']}" 
+            rpy="${calibration['base_link2velodyne']['roll']} ${calibration['base_link2velodyne']['pitch']} ${calibration['base_link2velodyne']['yaw']}" />
+  </VLP-16>
+  <VLP-16 parent="base_link" name="velodyne_left" topic="/points_left" hz="10" samples="220" gpu="$(arg gpu)">
+    <origin xyz="${calibration['base_link2velodyne_left']['x']} ${calibration['base_link2velodyne_left']['y']} ${calibration['base_link2velodyne_left']['z']}" 
+            rpy="${calibration['base_link2velodyne_left']['roll']} ${calibration['base_link2velodyne_left']['pitch']} ${calibration['base_link2velodyne_left']['yaw']}" />
+  </VLP-16>
+  
+  <VLP-16 parent="base_link" name="velodyne_right" topic="/points_right" hz="10" samples="220" gpu="$(arg gpu)">
+    <origin xyz="${calibration['base_link2velodyne_right']['x']} ${calibration['base_link2velodyne_right']['y']} ${calibration['base_link2velodyne_right']['z']}" 
+            rpy="${calibration['base_link2velodyne_right']['roll']} ${calibration['base_link2velodyne_right']['pitch']} ${calibration['base_link2velodyne_right']['yaw']}" />
+  </VLP-16>
+
+  <VLP-16 parent="base_link" name="velodyne_back" topic="/points_back" hz="10" samples="220" gpu="$(arg gpu)">
+    <origin xyz="${calibration['base_link2velodyne_back']['x']} ${calibration['base_link2velodyne_back']['y']} ${calibration['base_link2velodyne_back']['z']}" 
+            rpy="${calibration['base_link2velodyne_back']['roll']} ${calibration['base_link2velodyne_back']['pitch']} ${calibration['base_link2velodyne_back']['yaw']}" />
+  </VLP-16>
+
+  <CE30-A parent="base_link" name="velodyne_left_laser" topic="/points_left_laser" hz="10" samples="220" gpu="$(arg gpu)">
+    <origin xyz="${calibration['base_link2left_laser']['x']} ${calibration['base_link2left_laser']['y']} ${calibration['base_link2left_laser']['z']}" 
+            rpy="${calibration['base_link2left_laser']['roll']} ${calibration['base_link2left_laser']['pitch']} ${calibration['base_link2left_laser']['yaw']}" />
+  </CE30-A>
+
+  <CE30-A parent="base_link" name="right_laser" topic="/points_right_laser" hz="10" samples="220" gpu="$(arg gpu)">
+    <origin xyz="${calibration['base_link2right_laser']['x']} ${calibration['base_link2right_laser']['y']} ${calibration['base_link2right_laser']['z']}" 
+            rpy="${calibration['base_link2right_laser']['roll']} ${calibration['base_link2right_laser']['pitch']} ${calibration['base_link2right_laser']['yaw']}" />
+  </CE30-A>
+
+  <CE30-A parent="base_link" name="back_laser" topic="/points_back_laser" hz="10" samples="220" gpu="$(arg gpu)">
+    <origin xyz="${calibration['base_link2back_laser']['x']} ${calibration['base_link2back_laser']['y']} ${calibration['base_link2back_laser']['z']}" 
+            rpy="${calibration['base_link2back_laser']['roll']} ${calibration['base_link2back_laser']['pitch']} ${calibration['base_link2back_laser']['yaw']}" />
+  </CE30-A>
+  <CE30-A parent="base_link" name="front_laser" topic="/points_front_laser" hz="10" samples="220" gpu="$(arg gpu)">
+    <origin xyz="${calibration['base_link2front_laser']['x']} ${calibration['base_link2front_laser']['y']} ${calibration['base_link2front_laser']['z']}" 
+            rpy="${calibration['base_link2front_laser']['roll']} ${calibration['base_link2front_laser']['pitch']} ${calibration['base_link2front_laser']['yaw']}" />
+  </CE30-A>
+
+  <xacro:monocular_camera_macro suffix="camera" parent="base_link" namespace="camera" 
+                                x="${calibration['base_link2camera']['x']}"
+                                y="${calibration['base_link2camera']['y']}"
+                                z="${calibration['base_link2camera']['z']}"
+                                roll="${calibration['base_link2camera']['roll']}"
+                                pitch="${calibration['base_link2camera']['pitch']}"
+                                yaw="${calibration['base_link2camera']['yaw']}"
+                                fps="30" width="1288" height="964" fov="2"/>
+  <xacro:monocular_camera_macro suffix="back_camera" parent="base_link" namespace="back_camera" 
+                                x="${calibration['base_link2back_camera']['x']}"
+                                y="${calibration['base_link2back_camera']['y']}"
+                                z="${calibration['base_link2back_camera']['z']}"
+                                roll="${calibration['base_link2back_camera']['roll']}"
+                                pitch="${calibration['base_link2back_camera']['pitch']}"
+                                yaw="${calibration['base_link2back_camera']['yaw']}"
+                                fps="30" width="1288" height="964" fov="2"/>
+  <xacro:monocular_camera_macro suffix="right_camera" parent="base_link" namespace="right_camera" 
+                                x="${calibration['base_link2right_camera']['x']}"
+                                y="${calibration['base_link2right_camera']['y']}"
+                                z="${calibration['base_link2right_camera']['z']}"
+                                roll="${calibration['base_link2right_camera']['roll']}"
+                                pitch="${calibration['base_link2right_camera']['pitch']}"
+                                yaw="${calibration['base_link2right_camera']['yaw']}"
+                                fps="30" width="1288" height="964" fov="2"/>
+  <xacro:monocular_camera_macro suffix="left_camera" parent="base_link" namespace="left_camera" 
+                                x="${calibration['base_link2left_camera']['x']}"
+                                y="${calibration['base_link2left_camera']['y']}"
+                                z="${calibration['base_link2left_camera']['z']}"
+                                roll="${calibration['base_link2left_camera']['roll']}"
+                                pitch="${calibration['base_link2left_camera']['pitch']}"
+                                yaw="${calibration['base_link2left_camera']['yaw']}"
+                                fps="30" width="1288" height="964" fov="2"/>
+  <xacro:imu_macro suffix="imu" parent="base_link" namespace=""
+                   x="${calibration['base_link2imu']['x']}"
+                   y="${calibration['base_link2imu']['y']}"
+                   z="${calibration['base_link2imu']['z']}"
+                   roll="${calibration['base_link2imu']['roll']}"
+                   pitch="${calibration['base_link2imu']['pitch']}"
+                   yaw="${calibration['base_link2imu']['yaw']}"
+                   fps="100" />
+
+</robot>
