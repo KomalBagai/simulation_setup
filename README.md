@@ -1,9 +1,16 @@
 ## Sensor Placement Simulation
 
-The "gazebo_setup" branch comprises of "vehicle_sim" package. It contains the simulation of proposed sensor placements in GAZEBO. 
+This branch comprises of "vehicle_sim" package. It contains the simulation of proposed sensor placements in GAZEBO on the [ALiVe Project's](https://sites.google.com/iiitd.ac.in/iiitd-alive/home) self-driving platform.
+
+ [![video](resources/screencast_preview.png)](https://drive.google.com/file/d/1v5jKj2cLGLtTW9ti9S5i9QCXEQcUcyRu/view?usp=sharing)
+
+### Placements:
+![placement](resources/simulation_world.png)
+![setup](resources/sensor_setup_on_car.png)
+![coverage](resources/combined_coverage.png)
+
+### How to Run:
 Execute following commands to compile the package:
-
-
 ```
 git clone https://komalb_@bitbucket.org/alive_iiitd/sensoroncar_simulation.git
 cd sensoroncar_simulation
